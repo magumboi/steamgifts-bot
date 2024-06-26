@@ -1,0 +1,18 @@
+{
+    "url"   : "https://steamgifts.com",
+    "http"  : "http://",
+    "https" : "https://",
+    
+    "userAgent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36",
+
+    "filterURL" : {
+        "All"           : "search?page=%d",
+        "WishList"      : "search?page=%d&type=wishlist",
+        "Recommended"   : "search?page=%d&type=recommended",
+        "Copies"        : "search?page=%d&copy_min=2",
+        "DLC"           : "search?page=%d&dlc=true",
+        "New"           : "search?page=%d&type=new",
+        "Group"         : "search?page=%d&type=group",
+        "quickCheck"    : "search?page=%d&dlc=false&point_max=5"
+    }
+}
