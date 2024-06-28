@@ -1,6 +1,6 @@
 # steamgifts-bot
 
-![](https://i.imgur.com/oCqQaWO.png)
+![](https://i.imgur.com/yNatDAl.png)
 
 ## Installation
 
