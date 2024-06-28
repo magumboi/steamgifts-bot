@@ -320,8 +320,8 @@ class Bot:
                 res = self.entryGift(game_id)
                 if res:
                     self.points -= int(game_cost)
-                    game_name = item.find('h2', {'class': 'giveaway__heading'}).text
-                    logger.info(f"One more game 🎉: {game_name} ({game_cost}P)")
+                    game_name = item.find('h2', {'class': 'giveaway__heading'}).text.replace('(', ' (')
+                    logger.info(f"One more game 🎉: {game_name}")
                     self.giveaways_entered = str(int(self.giveaways_entered.replace(',', '')) + 1)
                     processed_count += 1
                     ga_time_end = item.find('div', {'class': 'giveaway__columns'}).find_all('div')[0].find('span')['data-timestamp']
