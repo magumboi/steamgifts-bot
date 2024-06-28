@@ -1,5 +1,5 @@
 [DEFAULT]
-; PHPSESSID cookie from the browser (required for the bot to work)
+; PHPSESSID cookie from the browser (required for the bot to work).
 cookie = 
 ; Discord webhook URL (optional)
 discord_webhook = 
