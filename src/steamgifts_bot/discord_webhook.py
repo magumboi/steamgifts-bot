@@ -33,7 +33,7 @@ class DiscordNotifications:
         self.webhook.execute()
         self.webhook.embeds = []
         
-    def send_embed_new_entry(self, title, giveaway_author, giveaway_author_profile_pic, giveaway_author_profile_url, giveaways_entered, giveaway_type, points, giveaway_url, thumbnail_url, time_left,entries):
+    def send_embed_new_entry(self, title, giveaway_author, giveaway_author_profile_pic, giveaway_author_profile_url, giveaways_entered, giveaway_type, points, giveaway_url, thumbnail_url, time_left,entries, win_chance):
         embed = DiscordEmbed(title=title, color="f8f803")
         embed.set_author(name=giveaway_author, icon_url=giveaway_author_profile_pic, url=giveaway_author_profile_url)
         steam_id = thumbnail_url.split('/')[-2]
@@ -46,7 +46,8 @@ class DiscordNotifications:
             <:steam:1250196047884456038> [Steam page]({steam_url})
             
             ⏰ Giveaway ends <t:{time_left}:R>
-            🏷️ {entries}
+            🏷️{entries}
+            🏆 {win_chance}%
             
         """)
         embed.set_description(description)

@@ -320,12 +320,16 @@ class Bot:
                 res = self.entryGift(game_id)
                 if res:
                     self.points -= int(game_cost)
+                    game_name = item.find('h2', {'class': 'giveaway__heading'}).text
                     logger.info(f"One more game 🎉: {game_name} ({game_cost}P)")
                     self.giveaways_entered = str(int(self.giveaways_entered.replace(',', '')) + 1)
                     processed_count += 1
-                    ga_time_left = item.find('div', {'class': 'giveaway__columns'}).find_all('div')[0].find('span')['data-timestamp']
+                    ga_time_end = item.find('div', {'class': 'giveaway__columns'}).find_all('div')[0].find('span')['data-timestamp']
+                    ga_time_posted = item.find('div', {'class': 'giveaway__columns'}).find_all('div')[1].find('span')['data-timestamp']
                     ga_entries = item.find('div', {'class': 'giveaway__links'}).findAll('a')[0].text
-                    self.discord.send_embed_new_entry(f"{game_name} ({game_cost}P)", game_author, game_author_profile_pic, f"{self.baseURL}/user/{game_author}", f'{int(self.giveaways_entered):,}', _type, self.points,f"{self.baseURL}/giveaway/{game_id}/{game_name_url}", game_thumbnail,ga_time_left,ga_entries)
+                    ga_copies = item.find_all('span', {'class': 'giveaway__heading__thin'})[0].text
+                    ga_win_chance = self.calculateWinChance(ga_time_end, ga_time_posted, ga_entries, ga_copies)
+                    self.discord.send_embed_new_entry(f"{game_name}", game_author, game_author_profile_pic, f"{self.baseURL}/user/{game_author}", f'{int(self.giveaways_entered):,}', _type, self.points,f"{self.baseURL}/giveaway/{game_id}/{game_name_url}", game_thumbnail,ga_time_end,ga_entries,ga_win_chance)
                     sleep(rand(3, 7))
         
         #logger.info(f"Points left: {self.points}")
@@ -340,6 +344,20 @@ class Bot:
             if time_left < date:
                 filtered_game_list.append(item)
         return filtered_game_list
+    
+    def calculateWinChance(self, time_end, time_posted, entries, copies):
+        time_left = datetime.fromtimestamp(int(time_end)) - datetime.now()
+        time_passed = datetime.now() - datetime.fromtimestamp(int(time_posted))
+        num_entries = int(entries.split(' ')[1].replace(',', ''))
+        num_copies = 1
+        # copies example: '(5,000 Copies)'
+        if 'Copies' in copies:
+            num_copies = int(copies.split(' ')[0].replace(',', '').replace('(', ''))
+        # calculate win chance
+        entries_prediction = (num_entries / time_passed.total_seconds()) * time_left.total_seconds()
+        win_chance = (1 / (num_entries + 1 + entries_prediction)) * 100 * num_copies
+        #truncate to 3 decimal places
+        return "{:.3f}".format(win_chance)
     
     def waitForMaxPoints(self):
         while self.points < self.maxPoint:
